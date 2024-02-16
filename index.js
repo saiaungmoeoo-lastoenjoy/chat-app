@@ -23,7 +23,8 @@ io.on("connection", (socket) => {
   console.log(`Use connected: ${socket.id}`);
 
   socket.on("join_room", (data) => {
-    socket.join(data);
+    socket.join(data.room);
+    socket.to(data.room).emit("join_room", data);
     console.log(`User with ID: ${socket.id} joined room: ${data}`);
   });
 
@@ -31,7 +32,7 @@ io.on("connection", (socket) => {
     socket.to(data.room).emit("receive_message", data);
   });
 
-  socket.on("disconnect", () => {
+  socket.on("disconnect", (data) => {
     console.log("User disconnected.", socket.id);
   });
 });
